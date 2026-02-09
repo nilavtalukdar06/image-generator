@@ -31,7 +31,12 @@ export function LogoutButton() {
     });
   };
   return (
-    <Button onClick={handleLogout} disabled={isLoading}>
+    <Button
+      onClick={handleLogout}
+      disabled={isLoading}
+      className="rounded-none shadow-none font-normal"
+      variant="destructive"
+    >
       {isLoading ? <Spinner /> : <LogOutIcon />}
       {isLoading ? "Loading" : "Logout"}
     </Button>
