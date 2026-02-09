@@ -21,6 +21,11 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth/auth-client";
+import { toast } from "sonner";
+import { Spinner } from "../ui/spinner";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -30,6 +35,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,8 +45,28 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
+  const onSubmit = async (values: FormValues) => {
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+        onSuccess: () => {
+          toast.success("Logged In Successfully");
+          setIsLoading(false);
+          form.reset();
+          router.replace("/");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+          setIsLoading(false);
+        },
+      },
+    );
   };
 
   return (
@@ -112,11 +139,12 @@ export default function LoginForm() {
               />
               <Field>
                 <Button
+                  disabled={isLoading}
                   type="submit"
                   className="shadow-none rounded-none font-normal w-full"
                 >
-                  <Key />
-                  <span>Login Now</span>
+                  {isLoading ? <Spinner /> : <Key />}
+                  {isLoading ? "Loading" : "Login Now"}
                 </Button>
                 <FieldDescription className="text-center font-light">
                   Don&apos;t have an account?{" "}
