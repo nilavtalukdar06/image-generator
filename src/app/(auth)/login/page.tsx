@@ -1,7 +1,11 @@
+import LoginForm from "@/components/auth/login-form";
+
 export default function Login() {
   return (
-    <div className="p-4">
-      <p className="text-neutral-400 font-light">Login</p>
+    <div className="min-h-svh w-full flex justify-center items-center p-4">
+      <div className="max-w-sm w-full mx-auto">
+        <LoginForm />
+      </div>
     </div>
   );
 }
