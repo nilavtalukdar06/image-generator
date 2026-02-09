@@ -16,7 +16,7 @@ import Link from "next/link";
 export default function LoginForm() {
   return (
     <div className="w-full">
-      <Card className="py-5 rounded-none shadow-none border-0">
+      <Card className="py-5 rounded-none shadow-none">
         <CardHeader className="px-5">
           <CardTitle className="font-normal text-neutral-700">Login</CardTitle>
           <CardDescription className="font-light text-neutral-500">
