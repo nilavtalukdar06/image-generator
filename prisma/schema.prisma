@@ -17,6 +17,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  images        Image[]
 
   @@unique([email])
   @@map("user")
@@ -68,4 +69,24 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  prompt    String
+  status    String
+  imageUrl  String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("image")
+}
+
+model Usage {
+  key    String    @id
+  points Int
+  expire DateTime?
 }
