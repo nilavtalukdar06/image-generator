@@ -127,7 +127,7 @@ export function AppSidebar() {
                   >
                     <Avatar className="h-8 w-8 rounded-full">
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
+                        src={result.data.user?.image || ""}
                         alt="profile-image"
                       />
                       <AvatarFallback className="bg-purple-500 text-white font-light text-xs!">
