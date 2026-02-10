@@ -40,4 +40,12 @@ export const imageRouter = createTRPCRouter({
       });
       return result;
     }),
+  getImages: protectedProcedure.query(async (opts) => {
+    const result = await prisma.image.findMany({
+      where: {
+        userId: opts.ctx.user.id,
+      },
+    });
+    return result;
+  }),
 });
