@@ -22,7 +22,7 @@ export const imageRouter = createTRPCRouter({
         name: "generate/image",
         data: {
           prompt: opts.input.prompt,
-          userId: opts.ctx.user.id,
+          imageId: result.id,
         },
       });
       return result;
