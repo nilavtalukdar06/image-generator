@@ -23,6 +23,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import initials from "initials";
@@ -164,6 +165,7 @@ export function AppSidebar() {
                     <CreditCard className="text-muted-foreground" />
                     <p className="text-muted-foreground font-light">Billing</p>
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="rounded-none hover:bg-red-50!"
                     disabled={isLoading}
