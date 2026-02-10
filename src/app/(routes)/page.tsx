@@ -1,9 +1,13 @@
 import { getQueryClient, trpc } from "@/backend/server";
+import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@/lib/auth/auth";
 import { CreateImage } from "@/modules/images/components/create-image";
 import { ViewImages } from "@/modules/images/components/view-images";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -26,7 +30,31 @@ export default async function Home() {
         </p>
         <CreateImage />
       </div>
-      <ViewImages />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ErrorBoundary fallback={<Error />}>
+          <Suspense fallback={<Loading />}>
+            <ViewImages />
+          </Suspense>
+        </ErrorBoundary>
+      </HydrationBoundary>
+    </div>
+  );
+}
+
+function Error() {
+  return (
+    <div className="w-full my-4">
+      <p className="text-red-500 font-light">Failed to fetch images</p>
+    </div>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="my-4 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 place-items-center gap-4">
+      {[1, 2, 3, 4, 5].map((item) => (
+        <Skeleton className="w-full h-50" key={item} />
+      ))}
     </div>
   );
 }
