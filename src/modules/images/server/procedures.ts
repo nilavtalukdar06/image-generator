@@ -1,6 +1,8 @@
 import { createTRPCRouter, protectedProcedure } from "@/backend/init";
 import { inngest } from "@/inngest/client";
 import prisma from "@/lib/prisma";
+import { consumeCredits } from "@/utils/usage";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const imageRouter = createTRPCRouter({
@@ -11,6 +13,15 @@ export const imageRouter = createTRPCRouter({
       }),
     )
     .mutation(async (opts) => {
+      try {
+        await consumeCredits(opts.ctx.user.id);
+      } catch (error) {
+        throw new TRPCError({
+          code: "PAYMENT_REQUIRED",
+          message:
+            "Image generation limit exceeded for today, try again after 24 hours",
+        });
+      }
       const result = await prisma.image.create({
         data: {
           prompt: opts.input.prompt,
@@ -23,6 +34,7 @@ export const imageRouter = createTRPCRouter({
         data: {
           prompt: opts.input.prompt,
           imageId: result.id,
+          userId: opts.ctx.user.id,
         },
       });
       return result;

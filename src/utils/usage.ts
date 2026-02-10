@@ -30,9 +30,3 @@ export const consumeCredits = async (userId: string) => {
   const result = await usageTracker.consume(userId, 1);
   return result;
 };
-
-export const incrementCredits = async (userId: string) => {
-  const usageTracker = await getUsageTracker();
-  const result = await usageTracker.reward(userId, 1);
-  return result;
-};
