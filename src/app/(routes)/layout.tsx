@@ -1,7 +1,8 @@
+import { AppSidebar } from "@/components/shared/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import React from "react";
 
 export default async function Layout({ children }: child) {
   const result = await auth.api.getSession({
@@ -10,5 +11,15 @@ export default async function Layout({ children }: child) {
   if (!result?.session) {
     redirect("/login");
   }
-  return <React.Fragment>{children}</React.Fragment>;
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <div className="w-full">
+        <div className="p-2 border-b">
+          <SidebarTrigger className="text-muted-foreground" />
+        </div>
+        {children}
+      </div>
+    </SidebarProvider>
+  );
 }

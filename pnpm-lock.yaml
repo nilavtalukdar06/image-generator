@@ -46,6 +46,9 @@ importers:
       dotenv:
         specifier: ^17.2.4
         version: 17.2.4
+      initials:
+        specifier: ^3.1.2
+        version: 3.1.2
       lucide-react:
         specifier: ^0.563.0
         version: 0.563.0(react@19.2.3)
@@ -6554,6 +6557,12 @@ packages:
     resolution:
       {
         integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==,
+      }
+
+  initials@3.1.2:
+    resolution:
+      {
+        integrity: sha512-Sltg35nx8+GX1w4U86rmbxFEmqFiSuMJviS6cB2KChB+jcT2/8Td+nlImXD74HkqpZF5PMv8hN57AyrA/7ltXw==,
       }
 
   inline-style-parser@0.2.7:
@@ -15208,6 +15217,8 @@ snapshots:
   imurmurhash@0.1.4: {}
 
   inherits@2.0.4: {}
+
+  initials@3.1.2: {}
 
   inline-style-parser@0.2.7: {}
 
