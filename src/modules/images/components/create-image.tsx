@@ -54,10 +54,12 @@ export function CreateImage() {
           Create Image
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-106.25 p-4 rounded-none">
         <DialogHeader>
-          <DialogTitle>Create Image</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className=" text-neutral-600 font-light">
+            Create Image
+          </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground font-light">
             Convert your ideas into stunning visuals
           </DialogDescription>
         </DialogHeader>
@@ -68,19 +70,24 @@ export function CreateImage() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="prompt">Enter your prompt</FieldLabel>
+                  <FieldLabel htmlFor="prompt" className="font-light">
+                    Enter your prompt
+                  </FieldLabel>
                   <Textarea
                     {...field}
                     id="prompt"
                     aria-invalid={fieldState.invalid}
-                    className="min-h-24 rounded-none shadow-none"
+                    className="min-h-24 rounded-none shadow-none font-light placeholder:font-light"
                     placeholder="Enter your prompt here"
                   />
-                  <FieldDescription>
+                  <FieldDescription className="font-light">
                     Write a short and concise prompt to generate your image
                   </FieldDescription>
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError
+                      errors={[fieldState.error]}
+                      className="font-light"
+                    />
                   )}
                 </Field>
               )}
