@@ -16,6 +16,7 @@ export const imageRouter = createTRPCRouter({
       try {
         await consumeCredits(opts.ctx.user.id);
       } catch (error) {
+        console.log(error);
         throw new TRPCError({
           code: "PAYMENT_REQUIRED",
           message:
