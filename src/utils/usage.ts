@@ -31,12 +31,6 @@ export const consumeCredits = async (userId: string) => {
   return result;
 };
 
-export const getUsageStatus = async (userId: string) => {
-  const usageTracker = await getUsageTracker();
-  const result = await usageTracker.get(userId);
-  return result;
-};
-
 export const incrementCredits = async (userId: string) => {
   const usageTracker = await getUsageTracker();
   const result = await usageTracker.reward(userId, 1);

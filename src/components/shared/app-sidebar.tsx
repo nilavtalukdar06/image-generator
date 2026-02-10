@@ -12,6 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
   useSidebar,
 } from "../ui/sidebar";
 import Link from "next/link";
@@ -28,10 +29,34 @@ import initials from "initials";
 import { authClient } from "@/lib/auth/auth-client";
 import { Skeleton } from "../ui/skeleton";
 import { ChevronsUpDown, CreditCard, LogOut, User } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function AppSidebar() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
   const result = authClient.useSession();
   const { isMobile } = useSidebar();
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+        onSuccess: () => {
+          toast.success("Logged Out Successfully");
+          setIsLoading(false);
+          router.replace("/login");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+          setIsLoading(false);
+        },
+      },
+    });
+  };
   return (
     <Sidebar>
       <SidebarHeader>
@@ -103,7 +128,6 @@ export function AppSidebar() {
                       <AvatarImage
                         src="https://github.com/shadcn.png"
                         alt="profile-image"
-                        className="grayscale"
                       />
                       <AvatarFallback className="bg-purple-500 text-white font-light text-xs!">
                         {initials(result.data.user.name)}
@@ -128,15 +152,23 @@ export function AppSidebar() {
                 sideOffset={4}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className="rounded-none">
-                    <User className="text-muted-foreground" />
-                    <p className="text-muted-foreground font-light">Account</p>
+                  <DropdownMenuItem className="rounded-none" asChild>
+                    <Link href="/account">
+                      <User className="text-muted-foreground" />
+                      <p className="text-muted-foreground font-light">
+                        Account
+                      </p>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="rounded-none">
                     <CreditCard className="text-muted-foreground" />
                     <p className="text-muted-foreground font-light">Billing</p>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-none hover:bg-red-50!">
+                  <DropdownMenuItem
+                    className="rounded-none hover:bg-red-50!"
+                    disabled={isLoading}
+                    onClick={handleLogout}
+                  >
                     <LogOut className="text-red-500" />
                     <p className="text-red-500 font-light">Logout</p>
                   </DropdownMenuItem>
@@ -146,6 +178,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }
