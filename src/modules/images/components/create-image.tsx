@@ -24,7 +24,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useTRPC } from "@/backend/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -37,6 +37,7 @@ const formSchema = z.object({
 
 export function CreateImage() {
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +52,9 @@ export function CreateImage() {
         toast.success("Image generation has been started");
         form.reset();
         setIsOpen(false);
+        queryClient.invalidateQueries({
+          queryKey: trpc.images.getImages.queryKey(),
+        });
       },
       onError: (error) => {
         toast.error(error.message || "Failed to send image generation request");

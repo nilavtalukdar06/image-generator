@@ -8,7 +8,11 @@ import React from "react";
 
 export function ViewImages() {
   const trpc = useTRPC();
-  const query = useSuspenseQuery(trpc.images.getImages.queryOptions());
+  const query = useSuspenseQuery(
+    trpc.images.getImages.queryOptions(undefined, {
+      refetchInterval: 5000,
+    }),
+  );
   return (
     <React.Fragment>
       {query.data?.length === 0 ? (
