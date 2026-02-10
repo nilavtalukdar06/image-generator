@@ -24,21 +24,21 @@ export function ViewImages() {
       ) : (
         <div className="w-full my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 place-items-center gap-4">
           {query.data?.map((item) => (
-            <div className="w-full h-62.5" key={item.id}>
+            <div className="w-full h-50 sm:h-62.5" key={item.id}>
               {item.status === "generated" && (
-                <div className="w-full h-full rounded-md">
+                <div className="w-full h-full rounded">
                   <Image
                     src={item.imageUrl!}
                     height={250}
                     width={250}
                     alt="generated-image"
                     loading="lazy"
-                    className="w-full h-full rounded-md"
+                    className="h-full w-full object-cover object-center"
                   />
                 </div>
               )}
               {item.status === "in_progress" && (
-                <Skeleton className="h-full w-full rounded-md" />
+                <Skeleton className="h-full w-full rounded-none" />
               )}
             </div>
           ))}
