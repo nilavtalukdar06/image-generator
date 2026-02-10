@@ -44,6 +44,12 @@ export const imageRouter = createTRPCRouter({
     const result = await prisma.image.findMany({
       where: {
         userId: opts.ctx.user.id,
+        status: {
+          not: "failed",
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
     return result;
