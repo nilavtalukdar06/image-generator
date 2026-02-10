@@ -19,6 +19,8 @@ model User {
   accounts      Account[]
   images        Image[]
 
+  plan String @default("free_user")
+
   @@unique([email])
   @@map("user")
 }
