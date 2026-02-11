@@ -53,7 +53,6 @@ export default function RegisterForm() {
         name: values.fullName,
         email: values.email,
         password: values.password,
-        image: "https://github.com/shadcn.png",
       },
       {
         onRequest: () => {

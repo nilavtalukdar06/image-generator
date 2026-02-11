@@ -29,7 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import initials from "initials";
 import { authClient } from "@/lib/auth/auth-client";
 import { Skeleton } from "../ui/skeleton";
-import { ChevronsUpDown, CreditCard, LogOut, User } from "lucide-react";
+import { ChevronsUpDown, CreditCard, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -147,27 +147,18 @@ export function AppSidebar() {
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="rounded-none"
                 side={isMobile ? "bottom" : "right"}
                 align="end"
                 sideOffset={4}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className="rounded-none" asChild>
-                    <Link href="/account">
-                      <User className="text-muted-foreground" />
-                      <p className="text-muted-foreground font-light">
-                        Account
-                      </p>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-none">
+                  <DropdownMenuItem>
                     <CreditCard className="text-muted-foreground" />
                     <p className="text-muted-foreground font-light">Billing</p>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    className="rounded-none hover:bg-red-50!"
+                    className="hover:bg-red-50!"
                     disabled={isLoading}
                     onClick={handleLogout}
                   >
