@@ -9,7 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { authClient } from "@/lib/auth/auth-client";
 import { CheckIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   plan: "free_user" | "pro_user" | "gold_user";
@@ -27,7 +30,8 @@ const pricingInfo = {
     title: "Pro Plan",
     description: "Become a pro memeber of DALL-E at just 20 dollars per month",
     features: ["50 Images per day", "Priority Support", "5GB Storage Space"],
-    productId: "",
+    productId: "066d72aa-46ed-4e45-b180-5728928f7ce5",
+    slug: "DALL-E-Pro-Plan",
   },
   gold_user: {
     title: "Gold Plan",
@@ -37,11 +41,29 @@ const pricingInfo = {
       "24/7 Personal Support",
       "15GB Storage Space",
     ],
-    productId: "",
+    productId: "b2707f0a-e8a0-4bc3-a75d-babccc6fec60",
+    slug: "DALL-E-Gold-Plan",
   },
 };
 
 export function PricingCard({ plan, currentPlan }: Props) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleCheckout = async () => {
+    try {
+      setIsLoading(true);
+      await authClient.checkout({
+        products: [
+          pricingInfo[plan as "pro_user" | "gold_user"].productId,
+        ] as string[],
+        slug: pricingInfo[plan as "pro_user" | "gold_user"].slug as string,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to initiate checkout");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Card className="rounded-none shadow-none w-full py-4 gap-3 bg-sidebar h-full">
       <CardHeader className="px-4">
@@ -66,7 +88,8 @@ export function PricingCard({ plan, currentPlan }: Props) {
           <Button
             className="w-full rounded-none font-normal"
             size="sm"
-            disabled={currentPlan === plan}
+            disabled={currentPlan === plan || isLoading}
+            onClick={handleCheckout}
           >
             Switch to this plan
           </Button>
