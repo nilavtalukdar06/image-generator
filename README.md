@@ -217,51 +217,6 @@ erDiagram
     User ||--o{ Image   : "has many"
 ```
 
-```mermaid
-flowchart LR
-    subgraph Client
-      U[User Browser<br/>Next.js App Router]
-    end
-
-    subgraph Backend
-      API[TRPC API<br/>(imageRouter, appRouter)]
-      AUTH[Better Auth<br/>Next.js handler]
-      BLL[Usage & Business Logic<br/>(consumeCredits, plan checks)]
-    end
-
-    subgraph Async
-      INN[Inngest Worker<br/>generate/image]
-      AI[AI Model<br/>(OpenAI via ai-sdk)]
-      IK[ImageKit<br/>CDN & Storage]
-    end
-
-    subgraph Data
-      DB[(PostgreSQL<br/>Prisma Models)]
-      POLAR[Polar<br/>Billing & Webhooks]
-    end
-
-    U -->|Login / Register| AUTH
-    AUTH --> DB
-    POLAR --> AUTH
-    POLAR -->|Webhooks: order paid / subscription revoked| DB
-
-    U -->|Create prompt / View images| API
-    API --> AUTH
-    API --> BLL
-    BLL --> DB
-    API --> DB
-
-    API -->|send event| INN
-    INN --> AI
-    AI --> INN
-    INN --> IK
-    IK --> INN
-    INN --> DB
-
-    U <-->|React Query (TRPC)| API
-    U -->|Loads images via ImageKit URLs| IK
-```
-
 ---
 
 ### Project Structure (High Level)
