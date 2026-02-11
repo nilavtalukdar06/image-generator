@@ -13,6 +13,7 @@ import { CheckIcon } from "lucide-react";
 
 interface Props {
   plan: "free_user" | "pro_user" | "gold_user";
+  currentPlan: "free_user" | "pro_user" | "gold_user";
 }
 
 const pricingInfo = {
@@ -21,7 +22,6 @@ const pricingInfo = {
     description:
       "Enjoy DALL-E aboslutely at no cost, Good if you want to try the application",
     features: ["3 Images per day", "Basic Support", "1GB Storage Space"],
-    productId: "",
   },
   pro_user: {
     title: "Pro Plan",
@@ -41,7 +41,7 @@ const pricingInfo = {
   },
 };
 
-export function PricingCard({ plan }: Props) {
+export function PricingCard({ plan, currentPlan }: Props) {
   return (
     <Card className="rounded-none shadow-none w-full py-4 gap-3 bg-sidebar h-full">
       <CardHeader className="px-4">
@@ -61,11 +61,17 @@ export function PricingCard({ plan }: Props) {
           </div>
         ))}
       </CardContent>
-      <CardFooter className="px-4 w-full mt-2">
-        <Button className="w-full rounded-none font-normal" size="sm">
-          Switch to this plan
-        </Button>
-      </CardFooter>
+      {plan !== "free_user" && (
+        <CardFooter className="px-4 w-full mt-2">
+          <Button
+            className="w-full rounded-none font-normal"
+            size="sm"
+            disabled={currentPlan === plan}
+          >
+            Switch to this plan
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }

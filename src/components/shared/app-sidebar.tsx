@@ -152,7 +152,9 @@ export function AppSidebar() {
                 sideOffset={4}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => authClient.customer.portal()}
+                  >
                     <CreditCard className="text-muted-foreground" />
                     <p className="text-muted-foreground font-light">Billing</p>
                   </DropdownMenuItem>
