@@ -61,10 +61,23 @@ export const imageRouter = createTRPCRouter({
       }),
     )
     .mutation(async (opts) => {
-      const result = await prisma.image.delete({
-        where: {
-          id: opts.input.imageId,
-        },
+      const result = await prisma.$transaction(async (tx) => {
+        const image = await tx.image.findUniqueOrThrow({
+          where: {
+            id: opts.input.imageId,
+          },
+        });
+        if (image.userId !== opts.ctx.user.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "You are not allowed to delete this image",
+          });
+        }
+        return await tx.image.delete({
+          where: {
+            id: image.id,
+          },
+        });
       });
       return result;
     }),
