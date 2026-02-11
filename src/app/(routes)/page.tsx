@@ -17,7 +17,10 @@ export default async function Home() {
     redirect("/login");
   }
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.images.getImages.queryOptions());
+  if (session) {
+    void queryClient.prefetchQuery(trpc.images.getImages.queryOptions());
+  }
+
   return (
     <div className="px-4 py-2 w-full">
       <div className="w-full space-y-2">
