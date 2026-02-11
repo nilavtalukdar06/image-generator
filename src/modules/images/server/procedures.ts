@@ -54,4 +54,19 @@ export const imageRouter = createTRPCRouter({
     });
     return result;
   }),
+  deleteImage: protectedProcedure
+    .input(
+      z.object({
+        imageId: z.string().uuid("image id is not valid"),
+      }),
+    )
+    .mutation(async (opts) => {
+      const result = await prisma.image.delete({
+        where: {
+          id: opts.input.imageId,
+          userId: opts.ctx.user.id,
+        },
+      });
+      return result;
+    }),
 });
