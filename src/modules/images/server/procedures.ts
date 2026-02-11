@@ -64,7 +64,6 @@ export const imageRouter = createTRPCRouter({
       const result = await prisma.image.delete({
         where: {
           id: opts.input.imageId,
-          userId: opts.ctx.user.id,
         },
       });
       return result;
