@@ -217,8 +217,6 @@ erDiagram
     User ||--o{ Image   : "has many"
 ```
 
-#### Data Flow Diagram – High-Level System Data Paths
-
 ```mermaid
 flowchart LR
     subgraph Client
