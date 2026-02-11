@@ -11,7 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Download, EllipsisVertical, Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -72,6 +76,21 @@ export function ViewImages() {
 }
 
 function ImageActions({ imageUrl, imageId, filename }: ImageProps) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    trpc.images.deleteImage.mutationOptions({
+      onSuccess: () => {
+        toast.success("Image deleted");
+        queryClient.invalidateQueries({
+          queryKey: trpc.images.getImages.queryKey(),
+        });
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to delete image");
+      },
+    }),
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const downloadImage = async () => {
@@ -100,6 +119,10 @@ function ImageActions({ imageUrl, imageId, filename }: ImageProps) {
     }
   };
 
+  const handleDelete = () => {
+    mutation.mutate({ imageId });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -124,7 +147,11 @@ function ImageActions({ imageUrl, imageId, filename }: ImageProps) {
             </span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="hover:bg-red-50! text-red-500 rounded-none">
+          <DropdownMenuItem
+            className="hover:bg-red-50! text-red-500 rounded-none"
+            disabled={mutation.isPending}
+            onClick={handleDelete}
+          >
             <Trash2 className="text-red-500 font-light" />
             <span className="font-light hover:text-red-500">Delete Image</span>
           </DropdownMenuItem>
