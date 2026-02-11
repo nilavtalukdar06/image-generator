@@ -35,6 +35,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export function AppSidebar() {
+  const [isOpening, setIsOpening] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const result = authClient.useSession();
@@ -58,6 +59,19 @@ export function AppSidebar() {
       },
     });
   };
+
+  const openPortal = async () => {
+    try {
+      setIsOpening(true);
+      await authClient.customer.portal();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to open customer portal");
+    } finally {
+      setIsOpening(false);
+    }
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -152,9 +166,7 @@ export function AppSidebar() {
                 sideOffset={4}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem
-                    onClick={() => authClient.customer.portal()}
-                  >
+                  <DropdownMenuItem disabled={isOpening} onClick={openPortal}>
                     <CreditCard className="text-muted-foreground" />
                     <p className="text-muted-foreground font-light">Billing</p>
                   </DropdownMenuItem>
