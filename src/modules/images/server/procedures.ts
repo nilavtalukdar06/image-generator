@@ -9,7 +9,10 @@ export const imageRouter = createTRPCRouter({
   createImage: protectedProcedure
     .input(
       z.object({
-        prompt: z.string().min(5, "prompt is too short"),
+        prompt: z
+          .string()
+          .min(5, "prompt is too short")
+          .max(100, "prompt is too large"),
       }),
     )
     .mutation(async (opts) => {
